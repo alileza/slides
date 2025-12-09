@@ -1,0 +1,15 @@
+{
+  "name": "spec-driven-dev-presentation",
+  "version": "1.0.0",
+  "description": "Spec-Driven Development presentation",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve . --listen 8000"
+  },
+  "keywords": ["presentation", "spec-driven", "reveal.js"],
+  "author": "Ali Reza Yahya",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}

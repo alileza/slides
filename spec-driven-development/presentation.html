@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>From Skeptic to Advocate: My Spec-Driven Development Journey</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/theme/black.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/monokai.css">
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 {
+            text-transform: none;
+        }
+        .reveal section img {
+            border: none;
+            box-shadow: none;
+            background: none;
+        }
+        .problem-highlight {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .solution-highlight {
+            color: #51cf66;
+            font-weight: bold;
+        }
+        .journey-marker {
+            background: rgba(81, 207, 102, 0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 20px 0;
+            font-size: 0.8em;
+            border-left: 4px solid #51cf66;
+        }
+        .act-title {
+            color: #ffd43b;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .framework-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+        .speckit { border-left-color: #51cf66; }
+        .bmad { border-left-color: #ffd43b; }
+        .openspec { border-left-color: #74c0fc; }
+        .agentos { border-left-color: #ff6b6b; }
+        .demo-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .key-takeaway {
+            background: rgba(81, 207, 102, 0.2);
+            padding: 20px;
+            border-left: 5px solid #51cf66;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .principle-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #51cf66;
+            text-align: left;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .before-box {
+            background: rgba(255, 107, 107, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ff6b6b;
+        }
+        .after-box {
+            background: rgba(81, 207, 102, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #51cf66;
+        }
+        .quote-box {
+            font-size: 1.3em;
+            font-style: italic;
+            padding: 30px;
+            margin: 20px 0;
+            border-left: 5px solid #ffd43b;
+            background: rgba(255, 212, 59, 0.1);
+        }
+        .token-graveyard {
+            font-size: 3em;
+            margin: 20px 0;
+        }
+        .vision-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        /* Stick figure styles */
+        .stick-figure {
+            display: inline-block;
+            width: 80px;
+            height: 120px;
+            position: relative;
+            margin: 20px;
+        }
+        .stick-head {
+            width: 30px;
+            height: 30px;
+            border: 3px solid currentColor;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 25px;
+        }
+        .stick-body {
+            width: 3px;
+            height: 50px;
+            background: currentColor;
+            position: absolute;
+            top: 30px;
+            left: 38.5px;
+        }
+        .stick-arms {
+            width: 60px;
+            height: 3px;
+            background: currentColor;
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            transform-origin: center;
+        }
+        .stick-leg-left, .stick-leg-right {
+            width: 3px;
+            height: 40px;
+            background: currentColor;
+            position: absolute;
+            top: 80px;
+        }
+        .stick-leg-left {
+            left: 28px;
+            transform: rotate(-20deg);
+            transform-origin: top;
+        }
+        .stick-leg-right {
+            left: 48px;
+            transform: rotate(20deg);
+            transform-origin: top;
+        }
+        /* Confused stick figure */
+        .confused .stick-arms {
+            animation: shrug 1s ease-in-out infinite;
+        }
+        @keyframes shrug {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(10deg); }
+        }
+        /* Happy stick figure */
+        .happy .stick-arms {
+            transform: rotate(20deg);
+        }
+        .happy {
+            animation: bounce 0.8s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        /* Walking stick figure */
+        .walking .stick-leg-left {
+            animation: walk-left 0.6s ease-in-out infinite;
+        }
+        .walking .stick-leg-right {
+            animation: walk-right 0.6s ease-in-out infinite;
+        }
+        @keyframes walk-left {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(20deg); }
+        }
+        @keyframes walk-right {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(-20deg); }
+        }
+        /* Thinking stick figure */
+        .thinking .stick-head::after {
+            content: '?';
+            position: absolute;
+            top: -20px;
+            right: -15px;
+            font-size: 20px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        /* Money falling animation */
+        .money-rain {
+            position: relative;
+            width: 100%;
+            height: 150px;
+        }
+        .coin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #ffd43b;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            animation: fall 2s linear infinite;
+        }
+        .coin::before {
+            content: '$';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: #333;
+        }
+        .coin:nth-child(1) { left: 20%; animation-delay: 0s; }
+        .coin:nth-child(2) { left: 40%; animation-delay: 0.3s; }
+        .coin:nth-child(3) { left: 60%; animation-delay: 0.6s; }
+        .coin:nth-child(4) { left: 80%; animation-delay: 0.9s; }
+        @keyframes fall {
+            0% { top: -30px; opacity: 1; }
+            100% { top: 150px; opacity: 0.3; }
+        }
+        /* Lightbulb idea animation */
+        .lightbulb {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+        }
+        .bulb {
+            width: 40px;
+            height: 50px;
+            background: #ffd43b;
+            border-radius: 50% 50% 0 0;
+            position: relative;
+            margin: 0 auto;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+        .bulb::after {
+            content: '';
+            width: 30px;
+            height: 8px;
+            background: #888;
+            position: absolute;
+            bottom: -8px;
+            left: 5px;
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 10px #ffd43b; opacity: 0.8; }
+            100% { box-shadow: 0 0 30px #ffd43b; opacity: 1; }
+        }
+        /* Checkmark animation */
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+            stroke-width: 4;
+            stroke: #51cf66;
+            stroke-miterlimit: 10;
+            margin: 20px;
+            box-shadow: inset 0 0 0 #51cf66;
+            animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+        }
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: #51cf66;
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes scale {
+            0%, 100% { transform: none; }
+            50% { transform: scale3d(1.1, 1.1, 1); }
+        }
+        @keyframes fill {
+            100% { box-shadow: inset 0 0 0 40px #51cf66; }
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Title -->
+            <section>
+                <h1>From Skeptic to Advocate</h1>
+                <h3>My Journey with Spec-Driven Development</h3>
+                <p style="margin-top: 60px;">Ali Reza Yahya</p>
+                <p style="font-size: 0.7em; color: #888;">@alileza</p>
+            </section>
+
+            <!-- ACT 1: THE SKEPTIC -->
+
+            <!-- Slide 2: Late 2024 - The Skeptic -->
+            <section>
+                <div class="journey-marker">Late 2024</div>
+                <h2>The Skeptic</h2>
+                <div class="quote-box fragment">
+                    "AI coding? It's just hype. Too unreliable."
+                </div>
+                <p class="fragment" style="margin-top: 40px; font-size: 0.9em;">
+                    I watched everyone get excited about AI assistants...<br>
+                    but I wasn't buying it.
+                </p>
+            </section>
+
+            <!-- Slide 3: What Changed -->
+            <section>
+                <h2>But Then...</h2>
+                <p class="fragment" style="font-size: 1.3em; margin-top: 60px;">
+                    Something changed early this year.
+                </p>
+                <p class="fragment" style="margin-top: 40px; color: #51cf66;">
+                    I decided to actually try it seriously.
+                </p>
+            </section>
+
+            <!-- ACT 2: THE EXPLORER -->
+
+            <!-- Slide 4: Early 2025 - The Explorer -->
+            <section>
+                <div class="journey-marker">Early 2025</div>
+                <h2>The Explorer</h2>
+                <p style="font-size: 1.2em;">Time to figure this out properly</p>
+            </section>
+
+            <!-- Slide 5: Approach #1 - Brute Force -->
+            <section>
+                <h2>Approach #1: Brute Force</h2>
+                <div class="quote-box">
+                    "Build me a Kubernetes operator for auto-scaling"
+                </div>
+                <div class="fragment" style="margin-top: 40px;">
+                    <p class="problem-highlight" style="font-size: 1.3em;">Result: Chaos</p>
+                    <ul style="text-align: left; margin: 30px 60px; font-size: 0.9em;">
+                        <li>Which controller pattern? AI guesses...</li>
+                        <li>CRD structure? AI assumes...</li>
+                        <li>Reconciliation logic? AI invents one...</li>
+                        <li>Error handling? AI makes it up...</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 6: Approach #2 - Pointing Directions -->
+            <section>
+                <h2>Approach #2: Pointing Directions</h2>
+                <div style="text-align: left; margin: 40px; font-size: 0.9em;">
+                    <p class="fragment">"Use Golang with Cobra CLI"</p>
+                    <p class="fragment">"Deploy with Terraform on AWS"</p>
+                    <p class="fragment">"Add proper logging here"</p>
+                    <p class="fragment">"No, not like that..."</p>
+                </div>
+                <p class="fragment" style="margin-top: 40px; font-size: 1.2em;">
+                    Better, but still <span class="problem-highlight">inconsistent</span>
+                </p>
+            </section>
+
+            <!-- Slide 7: The Pattern Emerges -->
+            <section>
+                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Then I Noticed a Pattern</h2>
+                <div class="comparison-grid" style="margin-top: 10px; gap: 10px; font-size: 0.7em;">
+                    <div class="before-box fragment" style="padding: 10px;">
+                        <div class="stick-figure confused" style="color: #ff6b6b; margin: 0 auto; transform: scale(0.5);">
+                            <div class="stick-head"></div>
+                            <div class="stick-body"></div>
+                            <div class="stick-arms"></div>
+                            <div class="stick-leg-left"></div>
+                            <div class="stick-leg-right"></div>
+                        </div>
+                        <h3 style="font-size: 1em; margin: 5px 0;">Vague Instructions</h3>
+                        <p style="font-size: 0.85em; margin: 3px 0; line-height: 1.2;">"Add monitoring"</p>
+                        <p style="font-size: 0.85em; margin: 3px 0; line-height: 1.2;">"Make it reliable"</p>
+                        <p style="margin: 10px 0;">↓</p>
+                        <p class="problem-highlight" style="font-size: 0.9em;">Hallucination</p>
+                    </div>
+                    <div class="after-box fragment" style="padding: 10px;">
+                        <div class="stick-figure happy" style="color: #51cf66; margin: 0 auto; transform: scale(0.5);">
+                            <div class="stick-head"></div>
+                            <div class="stick-body"></div>
+                            <div class="stick-arms"></div>
+                            <div class="stick-leg-left"></div>
+                            <div class="stick-leg-right"></div>
+                        </div>
+                        <h3 style="font-size: 1em; margin: 5px 0;">Specific Instructions</h3>
+                        <p style="font-size: 0.75em; margin: 3px 0; line-height: 1.2;">"Add Prometheus /metrics with request_duration_seconds histogram"</p>
+                        <p style="font-size: 0.75em; margin: 3px 0; line-height: 1.2;">"Add /health probe checking DB, 5s timeout"</p>
+                        <p style="margin: 10px 0;">↓</p>
+                        <p class="solution-highlight" style="font-size: 0.9em;">Accurate Results</p>
+                    </div>
+                </div>
+                <div class="fragment key-takeaway" style="margin-top: 15px; padding: 12px; font-size: 0.75em;">
+                    <strong>The insight:</strong> The more specific you are, the better AI performs
+                </div>
+            </section>
+
+            <!-- ACT 3: THE DISCOVERY -->
+
+            <!-- Slide 10: The Discovery -->
+            <section>
+                <div class="journey-marker">The Breakthrough</div>
+                <h2>Spec-Driven Development</h2>
+                <p class="fragment" style="font-size: 1.2em; margin-top: 40px;">
+                    I discovered a methodology that <span class="solution-highlight">enforced</span> specificity
+                </p>
+            </section>
+
+            <!-- Slide 11: What is Spec-Driven? -->
+            <section>
+                <h2>The Concept</h2>
+                <div style="text-align: left; margin: 40px;">
+                    <p class="fragment"><strong>1. Define the spec first</strong> - What and Why before How</p>
+                    <p class="fragment"><strong>2. Plan the technical approach</strong> - Make decisions explicit</p>
+                    <p class="fragment"><strong>3. Break into tasks</strong> - Isolated, manageable chunks</p>
+                    <p class="fragment"><strong>4. Then implement</strong> - Let AI execute with full context</p>
+                </div>
+                <div class="fragment key-takeaway" style="margin-top: 40px;">
+                    Each phase validates before moving forward
+                </div>
+            </section>
+
+            <!-- Slide 12: First Project -->
+            <section>
+                <h2>I Tried It on a New Project</h2>
+                <div class="fragment" style="margin: 40px 0;">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                    <p style="font-size: 1.3em;" class="solution-highlight">It worked!</p>
+                </div>
+                <ul class="fragment" style="text-align: left; margin: 30px 60px; font-size: 0.9em;">
+                    <li>Consistent output</li>
+                    <li>Clear decision trail</li>
+                    <li>Fewer surprises</li>
+                    <li>Better code quality</li>
+                </ul>
+            </section>
+
+            <!-- Slide 13: But... The Caveats -->
+            <section>
+                <h2>But... There Were Caveats</h2>
+                <div style="text-align: left; margin: 40px; font-size: 0.95em;">
+                    <p class="fragment">It felt <span class="problem-highlight">much slower</span></p>
+                    <p class="fragment">Ate up <span class="problem-highlight">context window fast</span></p>
+                    <p class="fragment">Claude needed to compact <span class="problem-highlight">before even writing code</span></p>
+                </div>
+                <div class="fragment" style="margin: 30px 0;">
+                    <div class="stick-figure thinking" style="color: #ff6b6b;">
+                        <div class="stick-head"></div>
+                        <div class="stick-body"></div>
+                        <div class="stick-arms"></div>
+                        <div class="stick-leg-left"></div>
+                        <div class="stick-leg-right"></div>
+                    </div>
+                </div>
+                <p class="fragment" style="margin-top: 20px; font-size: 1.1em;">
+                    Was the structure worth the overhead?
+                </p>
+            </section>
+
+            <!-- Slide 14: The Realization -->
+            <section>
+                <h2>The Realization</h2>
+                <div class="quote-box">
+                    Structure = Guarantees
+                </div>
+                <p class="fragment" style="margin-top: 40px; font-size: 1.1em;">
+                    Yes, it was slower...<br>
+                    but I <span class="solution-highlight">loved</span> having that structure.
+                </p>
+                <p class="fragment" style="margin-top: 40px;">
+                    Because I knew exactly what I was getting.
+                </p>
+            </section>
+
+            <!-- ACT 4: THE INSIGHT -->
+
+            <!-- Slide 15: The Real Insight -->
+            <section>
+                <div class="journey-marker">The Real Learning</div>
+                <h2>It's Not About the Framework</h2>
+                <p class="fragment" style="font-size: 1.2em; margin-top: 40px;">
+                    It's about the <span class="solution-highlight">principles</span>
+                </p>
+            </section>
+
+            <!-- Slide 16: The Four Principles -->
+            <section>
+                <h2>Four Core Principles</h2>
+                <div style="margin-top: 40px;">
+                    <div class="principle-card fragment">
+                        <h3>1. Chaining Processes</h3>
+                        <p style="font-size: 0.85em;">Break complex problems into sequential steps</p>
+                    </div>
+                    <div class="principle-card fragment">
+                        <h3>2. Isolated Context</h3>
+                        <p style="font-size: 0.85em;">Solve one specific thing at a time</p>
+                    </div>
+                    <div class="principle-card fragment">
+                        <h3>3. Documentation</h3>
+                        <p style="font-size: 0.85em;">Make implicit knowledge explicit</p>
+                    </div>
+                    <div class="principle-card fragment">
+                        <h3>4. Context Compaction</h3>
+                        <p style="font-size: 0.85em;">Keep focus tight and relevant</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 17: Principle #1 - Chaining -->
+            <section>
+                <h2>Principle #1: Chaining Processes</h2>
+                <div style="margin: 40px; text-align: left;">
+                    <p class="fragment">Instead of: "Build the whole thing"</p>
+                    <p class="fragment" style="margin-top: 30px;">Do this:</p>
+                    <ol class="fragment" style="font-size: 0.9em; margin-left: 40px;">
+                        <li>What are we building and why? (Spec)</li>
+                        <li>How will we build it? (Plan)</li>
+                        <li>What are the steps? (Tasks)</li>
+                        <li>Execute each step (Implement)</li>
+                    </ol>
+                </div>
+                <p class="fragment" style="margin-top: 40px; font-size: 0.9em;">
+                    Each phase builds on the previous, validated output
+                </p>
+            </section>
+
+            <!-- Slide 18: Principle #2 - Isolated Context -->
+            <section>
+                <h2>Principle #2: Isolated Context</h2>
+                <div style="margin: 40px;">
+                    <p class="fragment">Don't ask AI to juggle 10 things at once</p>
+                    <p class="fragment" style="margin-top: 30px;">
+                        Give it <span class="solution-highlight">one job</span> with <span class="solution-highlight">clear boundaries</span>
+                    </p>
+                    <div class="fragment comparison-grid" style="margin-top: 40px; font-size: 0.85em;">
+                        <div class="before-box">
+                            <strong>Confused AI:</strong><br>
+                            "Setup infrastructure, add monitoring, deploy service, configure networking"
+                        </div>
+                        <div class="after-box">
+                            <strong>Focused AI:</strong><br>
+                            "Task 1: Create Terraform module for EKS cluster with 3 node groups"
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 19: Principle #3 - Documentation -->
+            <section>
+                <h2>Principle #3: Documentation</h2>
+                <div style="margin: 40px; text-align: left;">
+                    <p class="fragment">Write down your decisions</p>
+                    <p class="fragment">Write down your requirements</p>
+                    <p class="fragment">Write down your constraints</p>
+                    <p class="fragment" style="margin-top: 30px;">
+                        This becomes your <span class="solution-highlight">shared source of truth</span>
+                    </p>
+                </div>
+                <div class="fragment key-takeaway" style="margin-top: 40px;">
+                    If it's not documented, the AI will guess. And guessing means hallucinating.
+                </div>
+            </section>
+
+            <!-- Slide 20: Principle #4 - Context Compaction -->
+            <section>
+                <h2>Principle #4: Context Compaction</h2>
+                <div style="margin: 40px;">
+                    <p class="fragment">Context windows are expensive and limited</p>
+                    <p class="fragment" style="margin-top: 30px;">
+                        Each phase should <span class="solution-highlight">summarize and compress</span> what came before
+                    </p>
+                    <ul class="fragment" style="text-align: left; margin: 30px 60px; font-size: 0.85em;">
+                        <li>Spec → condensed requirements</li>
+                        <li>Plan → key technical decisions</li>
+                        <li>Tasks → actionable steps only</li>
+                        <li>Implementation → focused on current task</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 21: The Frameworks -->
+            <section>
+                <h2>Frameworks as Implementations</h2>
+                <p style="font-size: 0.9em; margin-bottom: 30px;">These principles are implemented differently by various tools:</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.8em;">
+                    <div class="framework-card speckit fragment">
+                        <h3>Spec Kit</h3>
+                        <p>Lightweight, developer-orchestrated</p>
+                    </div>
+                    <div class="framework-card openspec fragment">
+                        <h3>OpenSpec</h3>
+                        <p>Minimalist, token-efficient</p>
+                    </div>
+                    <div class="framework-card bmad fragment">
+                        <h3>BMAD</h3>
+                        <p>Multi-agent agile simulation</p>
+                    </div>
+                    <div class="framework-card agentos fragment">
+                        <h3>Agent OS</h3>
+                        <p>Customizable orchestration platform</p>
+                    </div>
+                </div>
+                <p class="fragment" style="margin-top: 30px; font-size: 0.9em;">
+                    Today, I'll show you <span class="solution-highlight">Spec Kit</span>
+                </p>
+            </section>
+
+            <!-- Slide 22: Why Spec Kit -->
+            <section>
+                <h2>Why Spec Kit?</h2>
+                <div style="text-align: left; margin: 40px; font-size: 0.9em;">
+                    <p class="fragment">Works with any AI assistant (Claude, Copilot, etc.)</p>
+                    <p class="fragment">Minimal learning curve</p>
+                    <p class="fragment">Backed by GitHub</p>
+                    <p class="fragment">Single agent (token efficient)</p>
+                    <p class="fragment">Clear phase gates</p>
+                </div>
+                <p class="fragment" style="margin-top: 40px; font-size: 1.1em;">
+                    Perfect balance of <span class="solution-highlight">structure</span> and <span class="solution-highlight">simplicity</span>
+                </p>
+            </section>
+
+            <!-- DEMO SECTION -->
+
+            <!-- Slide 23: Demo Introduction -->
+            <section>
+                <div class="demo-section">
+                    <h2>Let's See It In Action</h2>
+                    <div class="lightbulb">
+                        <div class="bulb"></div>
+                    </div>
+                    <p style="margin-top: 30px; font-size: 1.1em;">
+                        Same feature request, two approaches
+                    </p>
+                </div>
+            </section>
+
+            <!-- Slide 24: Demo Part 1 - The Chaos -->
+            <section>
+                <h2>Demo Part 1: The Chaos</h2>
+                <div style="text-align: left; margin: 40px; font-size: 0.9em;">
+                    <p><strong>Request:</strong> "Add graceful shutdown to our Go API service"</p>
+                    <p style="margin-top: 30px;" class="fragment"><strong>Vague approach:</strong></p>
+                    <ul class="fragment" style="margin-left: 40px;">
+                        <li>AI guesses signal handling approach</li>
+                        <li>Assumes timeout without requirements</li>
+                        <li>Unclear connection draining strategy</li>
+                        <li>Inconsistent cleanup order</li>
+                    </ul>
+                </div>
+                <p class="fragment" style="margin-top: 40px; color: #ff6b6b;">
+                    [Live demo of unstructured approach]
+                </p>
+            </section>
+
+            <!-- Slide 25: Demo Part 2 - The Structure -->
+            <section>
+                <h2>Demo Part 2: With Spec Kit</h2>
+                <div style="text-align: left; margin: 40px; font-size: 0.85em;">
+                    <p><strong>Same request, structured approach:</strong></p>
+                    <ol style="margin: 20px 0 20px 40px;">
+                        <li class="fragment"><code>/speckit.specify</code> - Define what & why</li>
+                        <li class="fragment"><code>/speckit.plan</code> - Decide technical approach</li>
+                        <li class="fragment"><code>/speckit.tasks</code> - Break down into steps</li>
+                        <li class="fragment"><code>/speckit.implement</code> - Execute systematically</li>
+                    </ol>
+                </div>
+                <p class="fragment" style="margin-top: 40px; color: #51cf66;">
+                    [Live demo of SpecKit workflow]
+                </p>
+            </section>
+
+            <!-- Slide 26: Demo Contrast -->
+            <section>
+                <h2>The Difference</h2>
+                <div class="comparison-grid">
+                    <div class="before-box">
+                        <h3>Unstructured</h3>
+                        <ul style="font-size: 0.8em; text-align: left;">
+                            <li>Guesswork</li>
+                            <li>Inconsistent</li>
+                            <li>Rework needed</li>
+                            <li>Unclear decisions</li>
+                        </ul>
+                    </div>
+                    <div class="after-box">
+                        <h3>Spec-Driven</h3>
+                        <ul style="font-size: 0.8em; text-align: left;">
+                            <li>Explicit decisions</li>
+                            <li>Consistent approach</li>
+                            <li>Clear progression</li>
+                            <li>Documented rationale</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="fragment key-takeaway" style="margin-top: 30px;">
+                    Notice: Chaining, Isolation, Documentation, Compaction - all four principles in action
+                </div>
+            </section>
+
+            <!-- ACT 5: THE VISION -->
+
+            <!-- Slide 27: The Future I See -->
+            <section>
+                <div class="journey-marker">The Vision</div>
+                <h2>Where This is Heading</h2>
+                <p class="fragment" style="font-size: 1.2em; margin-top: 40px;">
+                    Right now, specs are <span class="problem-highlight">passive documentation</span>
+                </p>
+                <p class="fragment" style="font-size: 1.3em; margin-top: 40px;">
+                    But what if they were <span class="solution-highlight">executable</span>?
+                </p>
+            </section>
+
+            <!-- Slide 28: Current State -->
+            <section>
+                <h2>Current State</h2>
+                <div style="margin: 40px;">
+                    <p style="font-size: 0.9em;">Today, your spec.md is just a document:</p>
+                    <div style="margin: 40px 0; padding: 30px; background: rgba(255, 255, 255, 0.05); border-radius: 10px;">
+                        <p style="font-size: 0.85em; text-align: left;">
+                            1. Write spec<br>
+                            2. AI reads it<br>
+                            3. AI writes code<br>
+                            4. Hope it matches?
+                        </p>
+                    </div>
+                    <div class="fragment">
+                        <div class="stick-figure confused" style="color: #ff6b6b; margin: 0 auto;">
+                            <div class="stick-head"></div>
+                            <div class="stick-body"></div>
+                            <div class="stick-arms"></div>
+                            <div class="stick-leg-left"></div>
+                            <div class="stick-leg-right"></div>
+                        </div>
+                    </div>
+                    <p class="fragment problem-highlight" style="font-size: 0.9em;">
+                        No automatic validation that code matches spec
+                    </p>
+                </div>
+            </section>
+
+            <!-- Slide 29: The Vision - Executable Specs -->
+            <section>
+                <h2>The Vision: Executable Specifications</h2>
+                <div class="vision-box">
+                    <div class="lightbulb">
+                        <div class="bulb"></div>
+                    </div>
+                    <p style="font-size: 0.95em;">Imagine if your spec.md could test your code:</p>
+                    <div style="margin: 30px 0; text-align: left; font-size: 0.85em;">
+                        <p>1. Write spec defining requirements</p>
+                        <p>2. AI generates implementation</p>
+                        <p>3. <span class="solution-highlight">Spec automatically validates code</span></p>
+                        <p>4. Continuous verification against requirements</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 30: BDD for Product Building -->
+            <section>
+                <h2>BDD for Product Building</h2>
+                <div style="margin: 40px; text-align: left;">
+                    <p class="fragment">You know how we have test-driven development?</p>
+                    <p class="fragment" style="margin-top: 30px;">
+                        <span class="solution-highlight">Behavior-Driven Development (BDD)</span> takes it further
+                    </p>
+                    <p class="fragment" style="margin-top: 30px;">What if we applied this to <strong>product specifications</strong>?</p>
+                    <ul class="fragment" style="margin: 30px 0 0 40px; font-size: 0.9em;">
+                        <li>Specs written in executable format</li>
+                        <li>Requirements become assertions</li>
+                        <li>Implementation validated automatically</li>
+                        <li>Living documentation that never drifts</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Slide 31: Spec.md as Test Suite -->
+            <section>
+                <h2 style="font-size: 1.8em; margin-bottom: 10px;">Imagine: spec.md IS Your Test Suite</h2>
+                <div style="display: flex; flex-direction: column; height: 75vh; justify-content: space-between; padding: 0 20px;">
+                    <div class="fragment" style="background: rgba(255, 255, 255, 0.05); padding: 15px 25px; border-radius: 8px; text-align: left; flex: 1; display: flex; flex-direction: column;">
+                        <strong style="font-size: 0.9em; margin-bottom: 8px;">In spec.md:</strong>
+                        <pre style="margin: 0; font-size: 0.58em; line-height: 1.4; flex: 1; overflow: hidden;"><code>Scenario: User registration publishes welcome event
+  When POST request to "/api/v1/users/register" with body
+    """
+    {"email": "alice@example.com", "name": "Alice"}
+    """
+  Then response code should be 201
+  And "postgres" table "users" should contain
+    | email              | name  | status   |
+    | alice@example.com  | Alice | active   |
+  And message from "rabbitmq" topic "user.registered" should look like
+    """
+    {"event": "user.registered", "user_id": "*", "email": "alice@example.com"}
+    """
+  And "redis" key "user:alice@example.com:session" should exist
+  And cache TTL should be 3600 seconds</code></pre>
+                    </div>
+                    <p class="fragment" style="margin: 15px 0; font-size: 2em; text-align: center;">↓</p>
+                    <div class="fragment" style="background: rgba(81, 207, 102, 0.2); padding: 20px 25px; border-radius: 8px; text-align: left;">
+                        <strong style="font-size: 0.9em;">Automatically becomes:</strong><br>
+                        <code style="font-size: 0.8em;">go test ./tests/integration/user_test.go</code> <span style="font-size: 0.75em;">validates against running service</span>
+                    </div>
+                    <p class="fragment" style="margin-top: 15px; font-size: 0.85em; text-align: center;">
+                        <span class="solution-highlight">No more drift between docs and reality</span>
+                    </p>
+                </div>
+            </section>
+
+            <!-- Slide 32: The Provocation -->
+            <section>
+                <h2>The Provocation</h2>
+                <div class="quote-box" style="font-size: 1.1em;">
+                    From Spec-Driven to Spec-Validated Development
+                </div>
+                <div class="fragment" style="margin-top: 50px;">
+                    <p style="font-size: 1.1em;">Your product requirements shouldn't just <strong>guide</strong> development</p>
+                    <p style="font-size: 1.3em; margin-top: 30px;">
+                        They should <span class="solution-highlight">VERIFY</span> it
+                    </p>
+                </div>
+            </section>
+
+            <!-- CLOSING -->
+
+            <!-- Slide 33: Key Takeaways -->
+            <section>
+                <h2>What I Learned</h2>
+                <div style="text-align: left; margin: 40px; font-size: 0.95em;">
+                    <p class="fragment"><strong>1. Specificity matters</strong> - Vague instructions = hallucination</p>
+                    <p class="fragment"><strong>2. Structure provides guarantees</strong> - Worth the overhead</p>
+                    <p class="fragment"><strong>3. It's about principles, not frameworks</strong> - Chaining, isolation, documentation, compaction</p>
+                    <p class="fragment"><strong>4. Current tools are just the beginning</strong> - We're moving toward executable specs</p>
+                </div>
+            </section>
+
+            <!-- Slide 34: From Skeptic to Advocate -->
+            <section>
+                <h2>From Skeptic to Advocate</h2>
+                <div style="margin: 60px 0;">
+                    <p class="fragment" style="font-size: 1.1em;">Late 2024: "AI coding is just hype"</p>
+                    <p class="fragment" style="font-size: 1.3em; margin-top: 40px;">
+                        Today: <span class="solution-highlight">"AI coding with structure is transformative"</span>
+                    </p>
+                </div>
+                <p class="fragment" style="margin-top: 60px; font-size: 0.9em;">
+                    The difference wasn't the AI.<br>
+                    It was learning how to <strong>work with it</strong>.
+                </p>
+            </section>
+
+            <!-- Slide 35: Try It Yourself -->
+            <section>
+                <h2>Try It Yourself</h2>
+                <div style="margin: 50px;">
+                    <p class="fragment">Start with Spec Kit: <code style="color: #51cf66;">github.com/github/spec-kit</code></p>
+                    <p class="fragment" style="margin-top: 30px;">Pick one feature</p>
+                    <p class="fragment">Write the spec first</p>
+                    <p class="fragment">Experience the difference</p>
+                </div>
+                <div class="fragment" style="margin: 30px 0;">
+                    <div class="stick-figure walking" style="color: #51cf66; margin: 0 auto;">
+                        <div class="stick-head"></div>
+                        <div class="stick-body"></div>
+                        <div class="stick-arms"></div>
+                        <div class="stick-leg-left"></div>
+                        <div class="stick-leg-right"></div>
+                    </div>
+                </div>
+                <div class="fragment key-takeaway" style="margin-top: 20px;">
+                    Remember: The more specific you are, the better your AI performs
+                </div>
+            </section>
+
+            <!-- Slide 36: Q&A -->
+            <section>
+                <h1>Questions?</h1>
+                <div style="margin-top: 80px;">
+                    <p>Ali Reza Yahya</p>
+                    <p style="font-size: 0.8em; margin-top: 20px; color: #888;">@alileza</p>
+                </div>
+                <p style="margin-top: 60px; font-size: 0.8em; color: #666;">
+                    Slides: localhost:8000/presentation.html
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/markdown/markdown.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.0.4/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            transitionSpeed: 'default',
+            backgroundTransition: 'fade',
+            controls: true,
+            progress: true,
+            center: true,
+            slideNumber: 'c/t',
+            plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+        });
+    </script>
+</body>
+</html>
